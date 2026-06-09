@@ -1,48 +1,42 @@
+![Veynor Intro](https://raw.githubusercontent.com/Rosemay-AI/Veynor/main/docs/assets/veynor-intro.png)
+
+---
+
 # Veynor
 
 > **Agent Voice Skill — pluggable voice I/O for any agent runtime**
 >
-> Veynor is not where agents meet. Veynor is how each agent learns to speak and listen.
-
----
-
-## What is Veynor?
-
-Veynor is a **per-agent voice skill plugin**. Each agent installs its own Veynor instance. The platform (Discord, WebRTC, etc.) handles audio mixing naturally.
+> **Agent 语音技能插件 — 为任意 Agent 运行时提供可插拔的语音 I/O**
 
 You never adapt your agent to Veynor. You install Veynor into your agent.
 
-Veynor handles four things:
+你不需要改造 Agent 来适配 Veynor。你只需要把 Veynor 装入你的 Agent。
 
-- **Audio In** — platform PCM → agent callback
-- **Audio Out** — agent text → TTS → platform audio
-- **Turn Segmentation** — silence-based utterance detection
-- **Stream Bridge** — real-time duplex flow
+Veynor handles four things / Veynor 处理四件事：
 
-Your agent only needs two hooks:
-
-```typescript
-const skill = new VeynorSkill({
-  id: "my-agent",
-  onAudioInput: (pcm) => myAgent.handleAudio(pcm),    // Veynor → agent
-  streamText: () => myAgent.generateResponse(),         // agent → Veynor → TTS
-});
-```
+| | English | 中文 |
+|---|---|---|
+| Audio In | platform PCM → agent callback | 平台音频 → Agent 回调 |
+| Audio Out | agent text → TTS → platform audio | Agent 文本 → TTS → 平台音频 |
+| Turn Segmentation | silence-based utterance detection | 基于静音的语音断句 |
+| Stream Bridge | real-time duplex flow | 实时双向音频流 |
 
 ---
 
-## Architecture
+## Architecture / 架构
 
-```
+![Architecture](https://raw.githubusercontent.com/Rosemay-AI/Veynor/main/docs/assets/v0.2-feature-intro.png)
+
+```text
 Agent A + VeynorSkill
 Agent B + VeynorSkill
 Agent C + VeynorSkill
-    ↓ all connect to same voice channel
-Discord / WebRTC handles mixing
+    ↓ all connect to same voice channel / 全部连接同一个语音频道
+Discord / WebRTC handles mixing / 原生音频混音
 
-Per-agent data flow:
+Per-agent data flow / 每个 Agent 的数据流：
 ┌──────────────────────────────────┐
-│  VeynorSkill (agent's plugin)   │
+│  VeynorSkill (agent's plugin)    │
 │  onAudioInput(pcm) → agent       │
 │  streamText() ← agent            │
 │  ctx.say(text) → Pipeline → TTS  │
@@ -68,172 +62,168 @@ Per-agent data flow:
 
 ---
 
-## Quick Start
+## Quick Start / 快速开始
 
-### Prerequisites
+### Prerequisites / 环境要求
 
 - Node.js ≥ 22
 - pnpm
-- A Discord Bot Token with voice permissions
+- A Discord Bot Token with voice permissions / 有语音权限的 Discord Bot Token
 
-### Install
+### Install / 安装
 
 ```bash
-git clone <repo-url> veynor
-cd veynor
+git clone https://github.com/Rosemay-AI/Veynor.git
+cd Veynor
 pnpm install
 pnpm build
 ```
 
-### Configure
+### Setup an Agent / 配置 Agent
+
+Each agent has its own Discord bot identity. Shared provider keys (Groq, MiniMax) live in root `.env`. Per-agent Discord tokens live in `agents/<id>/.env`.
+
+每个 Agent 拥有独立的 Discord Bot 身份。共享的 Provider Key 放在根 `.env`，每个 Agent 的 Discord Token 放在 `agents/<id>/.env`。
+
+**Hermes / OpenClaw preset (recommended / 推荐)：**
 
 ```bash
-cp .env.example .env
-# Edit .env with the keys required for the demo you run.
+veynor agent setup hermes \
+  --discord-token <bot-token> \
+  --guild <guild-id> \
+  --channel "General" \
+  --groq-key <groq-key> \
+  --minimax-key <minimax-key> \
+  --start
 ```
 
-See [docs/configuration.md](./docs/configuration.md) for the full key list and cost tiers. The echo demo only needs Discord configuration; the recommended full voice-agent path uses MiniMax for LLM + TTS and adds Groq only for STT.
+**Custom HTTP agent / 自定义 HTTP Agent：**
 
-### Run: Echo Demo (sanity check)
+```bash
+veynor agent add architect \
+  --type http \
+  --url http://127.0.0.1:8788/chat \
+  --role architect \
+  --directory agents/architect \
+  --discord-token <bot-token> \
+  --guild <guild-id> \
+  --channel "General"
+
+veynor agent start architect
+```
+
+**Start all registered agents / 启动全部已注册 Agent：**
+
+```bash
+veynor agent start --all
+```
+
+### Echo Demo / 回音测试 (sanity check)
 
 ```bash
 cd examples/echo
 pnpm start
+# In Discord: join a voice channel → speak → hear your voice echoed back
+# 在 Discord 中：加入语音频道 → 说话 → 听到自己的回音
 ```
 
-In Discord: join a voice channel → speak → hear your voice echoed back.
-
-### Run: Hermes Agent Demo
+### Hermes Agent Demo
 
 ```bash
 cd examples/hermes-demo
 pnpm start
+# In Discord: join a voice channel → speak → Hermes responds
+# 在 Discord 中：加入语音频道 → 说话 → Hermes 回复你
 ```
 
-In Discord: join a voice channel → speak → Hermes responds.
+### Full STT → LLM → TTS Pipeline / 完整语音管线
 
-To use a real LLM, replace the `processText` function:
-
-```typescript
-const hermes = new HermesAgent({
-  processText: async (text, history) => {
-    const response = await fetch("https://api.openai.com/v1/chat/completions", {
-      method: "POST",
-      headers: { "Authorization": `Bearer ${process.env.OPENAI_API_KEY}`, "Content-Type": "application/json" },
-      body: JSON.stringify({
-        model: "gpt-4o-mini",
-        messages: [{ role: "system", content: "You are Hermes, a concise voice assistant." }, { role: "user", content: text }],
-      }),
-    });
-    return { text: (await response.json()).choices[0].message.content };
-  },
-});
-const skill = new VeynorSkill(hermes.toSkillOptions());
+```bash
+cd examples/agent-demo
+pnpm start
+# Requires / 需要: GROQ_API_KEY + MINIMAX_API_KEY
 ```
 
 ---
 
-## Packages
+## Packages / 包
 
-| Package | Description | Status |
-|---------|-------------|--------|
-| `@veynor/core` | AudioFrame, VoiceSession, VoiceTurn — frozen runtime primitives | ❄ stable |
-| `@veynor/skill-sdk` | Skill, SkillPipeline, SkillRuntime — execution layer | stable |
-| `@veynor/graph` | Signal DAG, GraphNode, GraphRuntime — advanced composition | stable |
-| `@veynor/agent` | VeynorSkill, VeynorSkillOptions, HermesAgent — voice skill plugin | ❄ frozen |
-| `@veynor/transport-discord` | Discord voice transport | stable |
-| `@veynor/adapter-openclaw` | OpenClaw Agent Bridge adapter | stable |
+| Package / 包 | Description / 说明 | Status |
+|---|---|---|
+| `@veynor/core` | AudioFrame, VoiceSession, VoiceTurn — frozen runtime primitives / 冻结运行时原语 | ❄ stable |
+| `@veynor/skill-sdk` | Skill, SkillPipeline, SkillRuntime — execution layer / 执行层 | stable |
+| `@veynor/graph` | Signal DAG, GraphNode, GraphRuntime — advanced composition / 高级编排 | stable |
+| `@veynor/agent` | VeynorSkill, RoundtableRuntime, HermesAgent — voice skill plugin / 语音技能插件 | ❄ frozen |
+| `@veynor/transport-discord` | Discord voice transport / Discord 语音传输 | stable |
+| `@veynor/adapter-openclaw` | OpenClaw Agent Bridge adapter / OpenClaw 适配器 | stable |
 
 ---
 
-## Creating Your Own Agent
+## CLI Commands / 命令行
+
+```text
+init        Initialize .env or scaffold a project    初始化配置或创建项目
+doctor      Check Discord, STT, TTS, and backend      检查运行环境
+config      Read and write .env values                查看和修改配置
+agent       Register local agents                     管理本地 Agent
+voice       Manage official, custom, cloned voices    管理音色
+meeting     Select roundtable agents                  选择会议 Agent
+start       Start Veynor or a demo                    启动运行时或 Demo
+```
+
+---
+
+## Creating Your Own Agent / 创建你自己的 Agent
+
+Veynor needs two hooks / Veynor 只需要两个钩子：
 
 ```typescript
 import { VeynorSkill } from "@veynor/agent";
 
-// Your agent — any existing codebase, any architecture
 class MyAgent {
   latestPcm: Buffer | null = null;
 
   handleAudio(pcm: Buffer) { this.latestPcm = pcm; }
 
   async *generateResponse(): AsyncIterable<string> {
-    if (!this.latestPcm) return;
-    const text = await this.think(this.latestPcm);
-    yield text;
-  }
-
-  async think(pcm: Buffer): Promise<string> {
-    // LLM, tools, chain-of-thought — whatever you want
-    return "I received " + pcm.length + " bytes of audio";
+    // LLM, tools, chain-of-thought — whatever you want / LLM、工具链、思维链 — 随便你
+    yield "hello from your agent";
   }
 }
 
-const myAgent = new MyAgent();
-
-// Install Veynor — no interface to implement, no contract
-const voiceSkill = new VeynorSkill({
-  id: "my-agent",
-  onAudioInput: (pcm) => myAgent.handleAudio(pcm),
-  streamText: () => myAgent.generateResponse(),
-});
-
-registerSkill(voiceSkill);
-pipe([voiceSkill, ttsSkill]);
-```
-
-### Direct callbacks (no class wrapper needed)
-
-```typescript
 const skill = new VeynorSkill({
-  id: "direct",
-  onAudioInput: (pcm) => console.log("got", pcm.length, "bytes"),
-  streamText: async function* () { yield "hello world"; },
+  id: "my-agent",
+  onAudioInput: (pcm) => myAgent.handleAudio(pcm),   // Veynor → agent
+  streamText: () => myAgent.generateResponse(),        // agent → Veynor → TTS
 });
 ```
 
 ---
 
-## Design Philosophy
+## Design Philosophy / 设计理念
 
 > **"Don't define how intelligence works. Define how intelligence gets a voice."**
+>
+> **"不要定义智能如何工作。定义智能如何获得声音。"**
 
-| Veynor Owns | Agent Owns |
-|-------------|-----------|
-| Audio I/O bridge (`onAudioInput` + `streamText`) | Memory, reasoning, tools |
-| Turn segmentation (silence detection) | Internal state machine |
-| Pipeline scheduling | Lifecycle |
-| Transport abstraction | Everything else |
-
----
-
-## Examples
-
-| Example | Description | External Dependencies |
-|---------|-------------|----------------------|
-| `echo` | Voice loopback — verify Discord PCM link | None |
-| `hermes-demo` | VeynorSkill + HermesAgent + TTS | None |
-| `agent-demo` | Full STT → LLM → TTS pipeline | Groq + MiniMax API keys |
-| `openclaw-demo` | OpenClaw Agent Bridge integration | OpenClaw runtime |
+| Veynor Owns / Veynor 负责 | Agent Owns / Agent 负责 |
+|---|---|
+| Audio I/O bridge (`onAudioInput` + `streamText`) | Memory, reasoning, tools / 记忆、推理、工具 |
+| Turn segmentation (silence detection) | Internal state machine / 内部状态机 |
+| Pipeline scheduling | Lifecycle / 生命周期 |
+| Transport abstraction | Everything else / 其他一切 |
 
 ---
 
-## Commands
+## Docs / 文档
 
-```bash
-pnpm install          # install dependencies
-pnpm build            # build all packages
-pnpm typecheck        # type-check all packages + examples
-```
-
----
-
-## ABI Specification
-
-See [ABI-SPEC.md](./ABI-SPEC.md) for the frozen 9-layer architecture specification.
+- [Configuration / 配置指南](./docs/configuration.md)
+- [Agent Registry CLI / Agent 注册表](./docs/agent-registry-cli.md)
+- [Roundtable System / 圆桌系统](./docs/roundtable-system.md)
+- [ABI Specification / ABI 规范](./ABI-SPEC.md)
 
 ---
 
-## License
+## License / 许可
 
 MIT
