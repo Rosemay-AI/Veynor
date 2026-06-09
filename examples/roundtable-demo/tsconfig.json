@@ -1,0 +1,12 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "noEmit": true,
+    "baseUrl": ".",
+    "paths": {
+      "@veynor/agent": ["../../packages/agent/src/index.ts"],
+      "@veynor/core": ["../../packages/core/src/index.ts"]
+    }
+  },
+  "include": ["*.ts"]
+}

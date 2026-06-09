@@ -1,0 +1,17 @@
+{
+  "name": "veynor-roundtable-demo",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "tsx main.ts",
+    "start:registry": "tsx registry-main.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@veynor/agent": "workspace:*"
+  },
+  "devDependencies": {
+    "tsx": "^4.19.0",
+    "typescript": "^5.6.0"
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "files": [],
+  "references": [
+    { "path": "./packages/core/tsconfig.build.json" },
+    { "path": "./packages/skill-sdk/tsconfig.build.json" },
+    { "path": "./packages/graph/tsconfig.build.json" },
+    { "path": "./packages/agent/tsconfig.build.json" },
+    { "path": "./packages/adapter-openclaw/tsconfig.build.json" },
+    { "path": "./packages/transport-discord/tsconfig.build.json" }
+  ]
+}

@@ -1,0 +1,27 @@
+name: veynor-opensource
+type: open-source-distribution
+status: production
+version: 1.0.0
+
+project_os:
+  version: 2.0.0
+  template: custom
+  profiles:
+    - node-profile
+
+project:
+  stage: production
+  visibility: public
+  criticality: medium
+
+ownership:
+  owner: daryhh
+
+language:
+  - typescript
+
+license: MIT
+
+repository:
+  provider: github
+  visibility: public

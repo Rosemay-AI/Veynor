@@ -1,0 +1,33 @@
+{
+  "version": 1,
+  "agents": [
+    {
+      "id": "architect",
+      "type": "module",
+      "role": "architect",
+      "domains": ["architecture", "runtime"],
+      "voiceId": "architect-voice",
+      "transport": {
+        "module": "./local-architect-agent.ts"
+      }
+    },
+    {
+      "id": "critic",
+      "type": "module",
+      "role": "critic",
+      "domains": ["risk", "review_plan"],
+      "voiceId": "critic-voice",
+      "floorRequests": [
+        {
+          "round": 1,
+          "intent": "challenge",
+          "reason": "Challenge registry-loaded runtime risk after the initial selected agents speak.",
+          "priority": 90
+        }
+      ],
+      "transport": {
+        "module": "./local-critic-agent.ts"
+      }
+    }
+  ]
+}

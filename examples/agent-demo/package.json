@@ -1,0 +1,19 @@
+{
+  "name": "veynor-agent-demo",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "tsx main.ts"
+  },
+  "dependencies": {
+    "@veynor/core": "workspace:*",
+    "@veynor/transport-discord": "workspace:*",
+    "@veynor/skill-sdk": "workspace:*",
+    "dotenv": "^16.4.0",
+    "form-data": "^4.0.0"
+  },
+  "devDependencies": {
+    "tsx": "^4.19.0",
+    "typescript": "^5.6.0"
+  }
+}

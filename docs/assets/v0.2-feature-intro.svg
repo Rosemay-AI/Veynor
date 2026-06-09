@@ -1,0 +1,162 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc">
+  <title id="title">Veynor V0.2 功能介绍</title>
+  <desc id="desc">Veynor V0.2 多 Agent 语音会议功能介绍图，展示单一 Host、Agent Registry、Roundtable Runtime、发言权调度、Agent 音色和会议记录。</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#08111f"/>
+      <stop offset="0.48" stop-color="#10283a"/>
+      <stop offset="1" stop-color="#14161f"/>
+    </linearGradient>
+    <linearGradient id="panel" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#182736"/>
+      <stop offset="1" stop-color="#0f1825"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#35d6c3"/>
+      <stop offset="0.55" stop-color="#8bd85f"/>
+      <stop offset="1" stop-color="#ffbd5a"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="16" stdDeviation="20" flood-color="#000000" flood-opacity="0.28"/>
+    </filter>
+    <style>
+      .sans { font-family: "Microsoft YaHei", "PingFang SC", "Noto Sans CJK SC", "Source Han Sans SC", Arial, sans-serif; }
+      .title { font-size: 78px; font-weight: 800; fill: #f4fbff; }
+      .subtitle { font-size: 32px; font-weight: 500; fill: #bad2df; }
+      .eyebrow { font-size: 25px; font-weight: 700; fill: #35d6c3; letter-spacing: 1px; }
+      .card-title { font-size: 31px; font-weight: 800; fill: #f4fbff; }
+      .card-text { font-size: 23px; font-weight: 500; fill: #b9c9d4; }
+      .small { font-size: 20px; font-weight: 600; fill: #dceaf1; }
+      .tag { font-size: 19px; font-weight: 700; fill: #102030; }
+      .node { font-size: 22px; font-weight: 800; fill: #f7fbff; }
+      .node-sub { font-size: 17px; font-weight: 600; fill: #b8c9d6; }
+    </style>
+  </defs>
+
+  <rect width="1600" height="900" fill="url(#bg)"/>
+  <path d="M88 748 C266 692 392 748 558 695 C739 638 799 498 1003 497 C1190 496 1250 610 1512 542" fill="none" stroke="#35d6c3" stroke-width="2" opacity="0.16"/>
+  <path d="M126 202 C326 256 495 158 690 220 C894 285 958 395 1153 350 C1327 310 1434 215 1532 256" fill="none" stroke="#ffbd5a" stroke-width="2" opacity="0.14"/>
+  <circle cx="1410" cy="112" r="104" fill="#35d6c3" opacity="0.06"/>
+  <circle cx="167" cy="810" r="132" fill="#ffbd5a" opacity="0.055"/>
+
+  <g transform="translate(88 74)">
+    <rect x="0" y="0" width="168" height="46" rx="23" fill="#35d6c3"/>
+    <text class="sans tag" x="30" y="30">V0.2 UPDATE</text>
+    <text class="sans title" x="0" y="126">Veynor 功能介绍</text>
+    <text class="sans subtitle" x="2" y="178">让多个 Agent 在同一个语音会议里有序发言、各自拥有声音，并留下可追溯记录。</text>
+  </g>
+
+  <g transform="translate(1030 82)">
+    <rect x="0" y="0" width="420" height="96" rx="8" fill="#101c2a" opacity="0.82" stroke="#2c4356"/>
+    <text class="sans eyebrow" x="30" y="40">核心变化</text>
+    <text class="sans small" x="30" y="72">从“单 Agent 语音技能”升级为“本地语音会议 Host”</text>
+  </g>
+
+  <g transform="translate(88 270)" filter="url(#shadow)">
+    <rect width="620" height="438" rx="8" fill="url(#panel)" stroke="#2e4658"/>
+    <text class="sans eyebrow" x="38" y="54">V0.2 架构主线</text>
+
+    <g transform="translate(42 94)">
+      <rect width="536" height="68" rx="8" fill="#1c3343" stroke="#3a6270"/>
+      <circle cx="38" cy="34" r="18" fill="#35d6c3"/>
+      <path d="M31 34 h14 M38 27 v14" stroke="#0d1b24" stroke-width="4" stroke-linecap="round"/>
+      <text class="sans node" x="76" y="30">One Veynor Host</text>
+      <text class="sans node-sub" x="76" y="54">统一承载 Agent Registry、Roundtable Runtime 与 Voice Transport</text>
+    </g>
+
+    <g transform="translate(42 184)">
+      <rect width="246" height="86" rx="8" fill="#132230" stroke="#365169"/>
+      <text class="sans node" x="24" y="34">Agent Registry</text>
+      <text class="sans node-sub" x="24" y="62">HTTP / stdio / module</text>
+      <rect x="290" width="246" height="86" rx="8" fill="#132230" stroke="#365169"/>
+      <text class="sans node" x="314" y="34">Meeting Select</text>
+      <text class="sans node-sub" x="314" y="62">选择本轮入会 Agent</text>
+    </g>
+
+    <g transform="translate(42 294)">
+      <rect width="536" height="86" rx="8" fill="#172f2f" stroke="#4b7869"/>
+      <text class="sans node" x="24" y="34">Roundtable Runtime</text>
+      <text class="sans node-sub" x="24" y="62">授予 Floor Token，收集发言，输出 DecisionRecord</text>
+    </g>
+
+    <path d="M310 162 v22 M310 270 v24" stroke="#88d8c9" stroke-width="3" stroke-linecap="round"/>
+    <path d="M300 178 l10 10 l10 -10 M300 288 l10 10 l10 -10" fill="none" stroke="#88d8c9" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+
+  <g transform="translate(748 270)">
+    <g filter="url(#shadow)">
+      <rect width="342" height="190" rx="8" fill="#101d2a" stroke="#2d455a"/>
+      <rect x="24" y="24" width="54" height="54" rx="8" fill="#35d6c3"/>
+      <path d="M42 52 h18 M51 43 v18" stroke="#102030" stroke-width="5" stroke-linecap="round"/>
+      <text class="sans card-title" x="98" y="55">Agent 注册 CLI</text>
+      <text class="sans card-text" x="28" y="112">本地维护 agents.json，</text>
+      <text class="sans card-text" x="28" y="144">按会议选择参与者。</text>
+    </g>
+
+    <g transform="translate(382 0)" filter="url(#shadow)">
+      <rect width="342" height="190" rx="8" fill="#101d2a" stroke="#2d455a"/>
+      <rect x="24" y="24" width="54" height="54" rx="8" fill="#8bd85f"/>
+      <path d="M39 51 h24 M45 43 l-8 8 l8 8 M57 43 l8 8 l-8 8" fill="none" stroke="#102030" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+      <text class="sans card-title" x="98" y="55">圆桌发言协议</text>
+      <text class="sans card-text" x="28" y="112">每次只授予一个</text>
+      <text class="sans card-text" x="28" y="144">Floor Token。</text>
+    </g>
+
+    <g transform="translate(0 230)" filter="url(#shadow)">
+      <rect width="342" height="190" rx="8" fill="#101d2a" stroke="#2d455a"/>
+      <rect x="24" y="24" width="54" height="54" rx="8" fill="#ffbd5a"/>
+      <path d="M39 58 c10 10 28 10 38 0 M41 42 c10 -8 25 -8 35 0" fill="none" stroke="#102030" stroke-width="5" stroke-linecap="round"/>
+      <text class="sans card-title" x="98" y="55">Agent 独立音色</text>
+      <text class="sans card-text" x="28" y="112">每个角色绑定 voiceId，</text>
+      <text class="sans card-text" x="28" y="144">发言身份更清楚。</text>
+    </g>
+
+    <g transform="translate(382 230)" filter="url(#shadow)">
+      <rect width="342" height="190" rx="8" fill="#101d2a" stroke="#2d455a"/>
+      <rect x="24" y="24" width="54" height="54" rx="8" fill="#f46f70"/>
+      <path d="M42 39 h20 M42 51 h20 M42 63 h14" stroke="#102030" stroke-width="5" stroke-linecap="round"/>
+      <text class="sans card-title" x="98" y="55">可审计会议记录</text>
+      <text class="sans card-text" x="28" y="112">记录议程、转写、申请、</text>
+      <text class="sans card-text" x="28" y="144">仲裁原因和最终决策。</text>
+    </g>
+  </g>
+
+  <g transform="translate(122 768)">
+    <rect width="1356" height="70" rx="8" fill="#0f1a26" stroke="#294154"/>
+    <text class="sans small" x="30" y="43">语音流：</text>
+    <g transform="translate(126 16)">
+      <rect width="142" height="38" rx="19" fill="#1d3443"/>
+      <text class="sans small" x="26" y="26">Human Voice</text>
+    </g>
+    <path d="M282 35 h54" stroke="url(#accent)" stroke-width="4" stroke-linecap="round"/>
+    <path d="M328 27 l9 8 l-9 8" fill="none" stroke="#8bd85f" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+    <g transform="translate(350 16)">
+      <rect width="92" height="38" rx="19" fill="#1d3443"/>
+      <text class="sans small" x="27" y="26">STT</text>
+    </g>
+    <path d="M456 35 h54" stroke="url(#accent)" stroke-width="4" stroke-linecap="round"/>
+    <path d="M502 27 l9 8 l-9 8" fill="none" stroke="#8bd85f" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+    <g transform="translate(524 16)">
+      <rect width="222" height="38" rx="19" fill="#21392f"/>
+      <text class="sans small" x="26" y="26">Roundtable Runtime</text>
+    </g>
+    <path d="M760 35 h54" stroke="url(#accent)" stroke-width="4" stroke-linecap="round"/>
+    <path d="M806 27 l9 8 l-9 8" fill="none" stroke="#8bd85f" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+    <g transform="translate(828 16)">
+      <rect width="168" height="38" rx="19" fill="#1d3443"/>
+      <text class="sans small" x="27" y="26">Agent Floor</text>
+    </g>
+    <path d="M1010 35 h54" stroke="url(#accent)" stroke-width="4" stroke-linecap="round"/>
+    <path d="M1056 27 l9 8 l-9 8" fill="none" stroke="#8bd85f" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+    <g transform="translate(1078 16)">
+      <rect width="92" height="38" rx="19" fill="#1d3443"/>
+      <text class="sans small" x="27" y="26">TTS</text>
+    </g>
+    <path d="M1184 35 h54" stroke="url(#accent)" stroke-width="4" stroke-linecap="round"/>
+    <path d="M1230 27 l9 8 l-9 8" fill="none" stroke="#8bd85f" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+    <g transform="translate(1252 16)">
+      <rect width="170" height="38" rx="19" fill="#1d3443"/>
+      <text class="sans small" x="26" y="26">Voice Channel</text>
+    </g>
+  </g>
+</svg>

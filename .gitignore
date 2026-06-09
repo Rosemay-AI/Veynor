@@ -1,0 +1,51 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Build artifacts
+dist/
+*.tsbuildinfo
+
+# Turbo cache
+.turbo/
+
+# Environment files (NEVER commit these)
+.env
+.env.local
+.env.*.local
+.env.bak.*
+.veynor/
+
+# Per-agent runtime directory (user-specific, NEVER commit)
+/agents/
+agents/**/.env
+agents/**/.env.*
+
+# Logs
+*.log
+*.log.*
+.pnpm-debug.log*
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Coverage
+coverage/
+.nyc_output/
+
+# Veynor test/demo artifacts
+/tmp/veynor-alpha.log
+
+# Stray development binaries and logs
+/node
+/pnpm
+/veyror
+/veyror@*
+/veyror_tc.txt

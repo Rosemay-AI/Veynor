@@ -1,0 +1,36 @@
+{
+  "name": "veynor",
+  "version": "1.0.0",
+  "description": "Realtime Voice Runtime for Discord & OpenClaw",
+  "private": true,
+  "type": "module",
+  "bin": {
+    "veynor": "./bin/veynor.js"
+  },
+  "scripts": {
+    "build": "turbo run build",
+    "dev": "turbo run dev",
+    "typecheck": "turbo run typecheck",
+    "clean": "turbo run clean",
+    "start": "node ./bin/veynor.js start",
+    "veynor": "node ./bin/veynor.js",
+    "doctor": "node ./bin/veynor.js doctor",
+    "init": "node ./bin/veynor.js init",
+    "start:echo": "node ./bin/veynor.js start echo",
+    "start:hermes": "node ./bin/veynor.js start hermes",
+    "start:openclaw": "node ./bin/veynor.js start openclaw",
+    "start:agent": "node ./bin/veynor.js start agent"
+  },
+  "devDependencies": {
+    "@types/node": "^25.9.1",
+    "turbo": "^2.0.0",
+    "typescript": "^5.9.3"
+  },
+  "packageManager": "pnpm@9.0.0",
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "dependencies": {
+    "opusscript": "^0.1.1"
+  }
+}
