@@ -25,7 +25,7 @@ Veynor handles four things / Veynor 处理四件事：
 
 ## Architecture / 架构
 
-![Architecture](https://raw.githubusercontent.com/Rosemay-AI/Veynor/main/docs/assets/v0.2-feature-intro.png)
+![Architecture](https://raw.githubusercontent.com/Rosemay-AI/Veynor/main/docs/assets/v1.0.0-feature-intro.png)
 
 ```text
 Agent A + VeynorSkill
